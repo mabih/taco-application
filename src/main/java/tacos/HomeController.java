@@ -12,6 +12,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(){
+        System.out.println("The home page was called");
         return "home";
     }
 }
