@@ -52,19 +52,19 @@ public class DesignTacoController {
                              .collect(Collectors.toList())
             );
         }
-        model.addAttribute("design", new Taco());
+        model.addAttribute("taco", new Taco());//if called design then when error comes the page doesnt load properly
         System.out.println("The design page was called");
         return "design";
     }
 
     @PostMapping
-    public String processDesign(@Valid Taco design, Errors errors)
+    public String processDesign(@Valid Taco taco, Errors errors)
     {
         if(errors.hasErrors()){
             return "design";
         }
        //save the Taco design..
-        log.info("Processing design: "+ design);
+        log.info("Processing design: "+ taco);
 
         return "redirect:/orders/current";
     }
