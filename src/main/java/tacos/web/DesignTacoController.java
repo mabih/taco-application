@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import tacos.Ingredient;
@@ -28,8 +29,9 @@ import static tacos.Ingredient.*;
 @RequestMapping("/design")
 public class DesignTacoController {
 
-    @GetMapping
-    public String showDesignForm(Model model){
+
+    @ModelAttribute
+    public void addIngredientsToModel(Model model) {
         List<Ingredient> ingredients = Arrays.asList(
                 new Ingredient("FLTO", "Flour Tortilla", Type.WRAP),
                 new Ingredient("COTO", "Corn Tortilla", Type.WRAP),
@@ -46,12 +48,16 @@ public class DesignTacoController {
         Type[] types = Ingredient.Type.values();
         for(Type type : types){
             model.addAttribute(type.toString().toLowerCase(),
-                     ingredients
-                             .stream()
-                             .filter(ingredient -> ingredient.getType().equals(type))
-                             .collect(Collectors.toList())
+                    ingredients
+                            .stream()
+                            .filter(ingredient -> ingredient.getType().equals(type))
+                            .collect(Collectors.toList())
             );
         }
+    }
+
+    @GetMapping
+    public String showDesignForm(Model model){
         model.addAttribute("taco", new Taco());//if called design then when error comes the page doesnt load properly
         System.out.println("The design page was called");
         return "design";
