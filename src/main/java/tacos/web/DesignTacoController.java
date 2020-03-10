@@ -9,12 +9,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import tacos.Ingredient;
+import tacos.Order;
 import tacos.Taco;
 import tacos.data.IngredientRepository;
+import tacos.data.TacoRepository;
 
 import javax.validation.Valid;
-import java.beans.DesignMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,14 +33,18 @@ import static tacos.Ingredient.*;
 @Slf4j
 @Controller
 @RequestMapping("/design")
+@SessionAttributes("order")
 public class DesignTacoController {
 
     private final IngredientRepository ingredientRepository;
 
+    private TacoRepository tacoRepository;
+
     @Autowired
-    public DesignTacoController(IngredientRepository ingredientRepository)
+    public DesignTacoController(IngredientRepository ingredientRepository, TacoRepository tacoRepository)
     {
         this.ingredientRepository = ingredientRepository;
+        this.tacoRepository = tacoRepository;
     }
 
 
@@ -69,20 +76,34 @@ public class DesignTacoController {
         }
     }
 
+    @ModelAttribute(name = "order")
+    public Order order(){
+        return  new Order();
+    }
+
+    @ModelAttribute(name = "taco")
+    public Taco taco(){
+        return new Taco();
+    }
+
     @GetMapping
     public String showDesignForm(Model model){
-        model.addAttribute("taco", new Taco());//if called design then when error comes the page doesnt load properly
+//        model.addAttribute("taco", new Taco());//if called design then when error comes the page doesnt load properly
         System.out.println("The design page was called");
         return "design";
     }
 
     @PostMapping
-    public String processDesign(@Valid Taco taco, Errors errors)
+    public String processDesign(@Valid Taco taco, Errors errors, @ModelAttribute Order order, RedirectAttributes attributes)
     {
         if(errors.hasErrors()){
             return "design";
         }
-       //save the Taco design..
+
+        Taco saved = tacoRepository.save(taco);
+        order.addDesign(saved);
+        attributes.addFlashAttribute(order);
+
         log.info("Processing design: "+ taco);
 
         return "redirect:/orders/current";
