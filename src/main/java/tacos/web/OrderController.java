@@ -35,12 +35,11 @@ public class OrderController {
 
     @GetMapping("/current")
     public String orderForm(Model model){
-        model.addAttribute("order", new Order());
         return "orderForm";
     }
 
     @PostMapping
-    public String processOrder(@Valid Order order, Errors errors, SessionStatus sessionStatus){
+    public String processOrder(@Valid @ModelAttribute("order") Order order, Errors errors, SessionStatus sessionStatus){
         if(errors.hasErrors()) {
             return "orderForm";
         }

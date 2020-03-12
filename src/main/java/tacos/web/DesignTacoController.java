@@ -51,7 +51,7 @@ public class DesignTacoController {
     @ModelAttribute
     public void addIngredientsToModel(Model model) {
         List<Ingredient> ingredients = new ArrayList<>();
-        ingredientRepository.findAll().forEach(i -> ingredients.add(i));
+        ingredientRepository.findAll().forEach(ingredients::add);
 //        List<Ingredient> ingredients = Arrays.asList(
 //                new Ingredient("FLTO", "Flour Tortilla", Type.WRAP),
 //                new Ingredient("COTO", "Corn Tortilla", Type.WRAP),
@@ -94,7 +94,7 @@ public class DesignTacoController {
     }
 
     @PostMapping
-    public String processDesign(@Valid Taco taco, Errors errors, @ModelAttribute Order order, RedirectAttributes attributes)
+    public String processDesign(@Valid Taco taco, Errors errors, @ModelAttribute Order order)
     {
         if(errors.hasErrors()){
             return "design";
@@ -102,7 +102,6 @@ public class DesignTacoController {
 
         Taco saved = tacoRepository.save(taco);
         order.addDesign(saved);
-        attributes.addFlashAttribute(order);
 
         log.info("Processing design: "+ taco);
 
