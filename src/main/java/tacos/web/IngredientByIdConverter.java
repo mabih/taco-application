@@ -8,10 +8,6 @@ import tacos.data.IngredientRepository;
 
 import java.util.Optional;
 
-/**
- * @author mabel.iglesiasham
- * @since 16.8.0
- */
 
 @Component
 public class IngredientByIdConverter implements Converter<String, Ingredient> {
@@ -25,8 +21,8 @@ public class IngredientByIdConverter implements Converter<String, Ingredient> {
 
     @Override
     public Ingredient convert(String id){
-        Optional<Ingredient> optionalIngredient = Optional.ofNullable(ingredientRepository.findOne(id));
-        return optionalIngredient.isPresent() ? optionalIngredient.get() : null;
+        Optional<Ingredient> optionalIngredient = ingredientRepository.findById(id);
+        return optionalIngredient.orElse(null);
     }
 
 

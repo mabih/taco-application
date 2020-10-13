@@ -15,10 +15,6 @@ import tacos.data.OrderRepository;
 
 import javax.validation.Valid;
 
-/**
- * @author mabel.iglesiasham
- * @since 16.8.0
- */
 
 @Slf4j
 @Controller
@@ -27,7 +23,6 @@ import javax.validation.Valid;
 public class OrderController {
 
     private OrderRepository orderRepository;
-
 
     public OrderController(OrderRepository orderRepository){
         this.orderRepository = orderRepository;

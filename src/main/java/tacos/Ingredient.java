@@ -5,23 +5,23 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
-//import javax.persistence.Entity;
-//import javax.persistence.Id;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
 
-/**
- * @author mabel.iglesiasham
- * @since 16.8.0
- */
 
-@Data
+@Data //this adds implicitly an ArgsConstructor, but the @NoArgsConstructor removes it. Therefore we need the @RequiredArgsConstructor bellow
 @RequiredArgsConstructor
-//@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
-//@Entity
+@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
+@Entity
 public class Ingredient {
 
-//    @Id
+    @Id
     private final String id;
     private final String name;
+
+    @Enumerated(EnumType.STRING)
     private final Type type;
 
     public enum Type{
